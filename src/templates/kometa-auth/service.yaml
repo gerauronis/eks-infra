@@ -1,0 +1,19 @@
+{{- if .Values.auth }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-auth
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-auth
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Chart.Name }}-auth
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 4041
+{{- end }}

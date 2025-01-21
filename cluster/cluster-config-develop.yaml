@@ -1,0 +1,13 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: kometa-dev
+  region: us-east-1
+  version: "1.27"
+
+nodeGroups:
+  - name: ng-default
+    instanceType: t3.medium
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 2

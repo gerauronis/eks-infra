@@ -1,0 +1,41 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: {{ if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion }}networking.k8s.io/v1{{ else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion }}networking.k8s.io/v1beta1{{ else }}extensions/v1beta1{{ end }}
+kind: Ingress
+metadata:
+  name: {{ include "kometa.fullname" . }}
+  labels:
+    {{- include "kometa.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.ingress.className }}
+  {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    {{- range .Values.ingress.services }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ .name }}
+                port:
+                  number: {{ .port }}
+          {{- end }}
+    {{- end }}
+{{- end }}

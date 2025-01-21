@@ -1,0 +1,33 @@
+{{- if .Values.auth }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-auth
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-auth
+spec:
+  replicas: {{ .Values.auth.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-auth
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-auth
+    spec:
+      containers:
+      - name: auth-container
+        image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag }}"
+        ports:
+        - containerPort: 4041
+        resources:
+          limits:
+            memory: "{{ .Values.auth.resources.limits.memory }}"
+            cpu: "{{ .Values.auth.resources.limits.cpu }}"
+      tolerations:
+      - key: "spot-instance"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+{{- end }}

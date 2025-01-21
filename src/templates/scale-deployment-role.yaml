@@ -1,0 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: scale-deployment-role
+  namespace: kometa-develop
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - deployments/scale
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
