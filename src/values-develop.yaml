@@ -49,10 +49,11 @@ ingress:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:202533518394:certificate/f89b813d-7834-49e0-a23f-186d30037927
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:202533518394:certificate/f89b813d-7834-49e0-a23f-186d30037927,arn:aws:acm:us-east-1:202533518394:certificate/8fede441-dc3e-4211-9f79-785d9a26ddc1
   tls:
     - hosts:
         - auth.kometadeveloper.xyz
+        - core.kometadeveloper.xyz
       secretName: kometa-tls
   services:
     - host: auth.kometadeveloper.xyz
@@ -60,6 +61,12 @@ ingress:
         - path: /
           pathType: Prefix
           name: kometa-auth
+          port: 80
+    - host: core.kometadeveloper.xyz
+      paths:
+        - path: /
+          pathType: Prefix
+          name: kometa-core
           port: 80
 
 auth:
@@ -78,6 +85,26 @@ auth:
     port: 4041
   ingress:
     host: auth.kometadeveloper.xyz
+    paths:
+      - path: /
+        pathType: Prefix
+
+core:
+  replicaCount: 1
+  image:
+    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-core
+    tag: v1.0-develop-2
+  resources:
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
+    requests:
+      memory: "150Mi"
+      cpu: "150m"
+  service:
+    port: 4041
+  ingress:
+    host: core.kometadeveloper.xyz
     paths:
       - path: /
         pathType: Prefix

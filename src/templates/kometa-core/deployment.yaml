@@ -1,0 +1,33 @@
+{{- if .Values.core }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-core
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-core
+spec:
+  replicas: {{ .Values.core.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-core
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-core
+    spec:
+      containers:
+      - name: core-container
+        image: "{{ .Values.core.image.repository }}:{{ .Values.core.image.tag }}"
+        ports:
+        - containerPort: 4041
+        resources:
+          limits:
+            memory: "{{ .Values.core.resources.limits.memory }}"
+            cpu: "{{ .Values.core.resources.limits.cpu }}"
+      tolerations:
+      - key: "spot-instance"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+{{- end }}

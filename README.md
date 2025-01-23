@@ -109,3 +109,9 @@ Review template
   --namespace kometa-develop \
   -f src/values-develop.yaml > out.yaml
 ```
+
+
+Review IPS
+```bash
+kubectl get nodes -o wide  --namespace kometa-develop
+```
