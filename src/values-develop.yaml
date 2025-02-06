@@ -120,7 +120,7 @@ cardsService:
   replicaCount: 1
   name: cards-service
   image:
-    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-core
+    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/tarjetas-service
     tag: v1.0-develop-4
   resources:
     limits:
