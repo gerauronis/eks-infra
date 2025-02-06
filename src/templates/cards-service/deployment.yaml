@@ -1,0 +1,33 @@
+{{- if .Values.cardsService }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.cardsService.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.cardsService.name }}
+spec:
+  replicas: {{ .Values.cardsService.replicaCount }}
+  selector:
+    matchLabels:
+      app: cards-service
+  template:
+    metadata:
+      labels:
+        app: cards-service
+    spec:
+      containers:
+      - name: cards-service-container
+        image: "{{ .Values.cardsService.image.repository }}:{{ .Values.cardsService.image.tag }}"
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: "{{ .Values.cardsService.resources.limits.memory }}"
+            cpu: "{{ .Values.cardsService.resources.limits.cpu }}"
+      tolerations:
+      - key: "spot-instance"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+{{- end }}
