@@ -121,7 +121,7 @@ cardsService:
   name: cards-service
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/tarjetas-service
-    tag: v1.0-dev-17
+    tag: v1.0-dev-18
   resources:
     limits:
       memory: "200Mi"
