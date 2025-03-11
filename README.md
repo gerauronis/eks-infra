@@ -69,7 +69,7 @@ After Update change context depend to stage:
 ```bash
 kubectl config get-contexts
 
-kubectl config use-context test@kometa-dev.us-east-2.eksctl.io
+kubectl config use-context gerardo.argueta@auronis.net@kometa-dev.us-east-1.eksctl.io
 ```
 
 ```bash

@@ -1,0 +1,19 @@
+{{- if .Values.marketplace }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-marketplace
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-marketplace
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Chart.Name }}-marketplace
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: {{ .Values.marketplace.service.port }}
+{{- end }}

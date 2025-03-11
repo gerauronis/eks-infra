@@ -1,0 +1,33 @@
+{{- if .Values.marketplace }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-marketplace
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-marketplace
+spec:
+  replicas: {{ .Values.marketplace.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-marketplace
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-marketplace
+    spec:
+      containers:
+      - name: marketplace-container
+        image: "{{ .Values.marketplace.image.repository }}:{{ .Values.marketplace.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.marketplace.service.port }}
+        resources:
+          limits:
+            memory: "{{ .Values.marketplace.resources.limits.memory }}"
+            cpu: "{{ .Values.marketplace.resources.limits.cpu }}"
+      tolerations:
+      - key: "spot-instance"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+{{- end }}

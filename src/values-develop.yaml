@@ -49,7 +49,7 @@ ingress:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:202533518394:certificate/f89b813d-7834-49e0-a23f-186d30037927,arn:aws:acm:us-east-1:202533518394:certificate/8fede441-dc3e-4211-9f79-785d9a26ddc1,arn:aws:acm:us-east-1:202533518394:certificate/34e171ec-b287-4a4a-b0ea-d02c16cfff2b
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:202533518394:certificate/f89b813d-7834-49e0-a23f-186d30037927,arn:aws:acm:us-east-1:202533518394:certificate/8fede441-dc3e-4211-9f79-785d9a26ddc1,arn:aws:acm:us-east-1:202533518394:certificate/34e171ec-b287-4a4a-b0ea-d02c16cfff2b,arn:aws:acm:us-east-1:202533518394:certificate/ff27f041-c3ee-4787-889d-5c80eeb91c16
   tls:
     - hosts:
         - auth.kometadeveloper.xyz
@@ -74,6 +74,12 @@ ingress:
         - path: /
           pathType: Prefix
           name: cards-service
+          port: 80
+    - host: marketplace.kometadeveloper.xyz
+      paths:
+        - path: /
+          pathType: Prefix
+          name: kometa-marketplace
           port: 80
 
 auth:
@@ -112,6 +118,26 @@ core:
     port: 4041
   ingress:
     host: core.kometadeveloper.xyz
+    paths:
+      - path: /
+        pathType: Prefix
+
+marketplace:
+  replicaCount: 1
+  image:
+    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-marketplace
+    tag: v1.0-develop-1
+  resources:
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
+    requests:
+      memory: "150Mi"
+      cpu: "150m"
+  service:
+    port: 3000
+  ingress:
+    host: marketplace.kometadeveloper.xyz
     paths:
       - path: /
         pathType: Prefix
