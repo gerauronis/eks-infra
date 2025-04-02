@@ -1,0 +1,33 @@
+{{- if .Values.tournament }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-tournament
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-tournament
+spec:
+  replicas: {{ .Values.tournament.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-tournament
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-tournament
+    spec:
+      containers:
+      - name: tournament-container
+        image: "{{ .Values.tournament.image.repository }}:{{ .Values.tournament.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.tournament.service.port }}
+        resources:
+          limits:
+            memory: "{{ .Values.tournament.resources.limits.memory }}"
+            cpu: "{{ .Values.tournament.resources.limits.cpu }}"
+      tolerations:
+      - key: "spot-instance"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+{{- end }}

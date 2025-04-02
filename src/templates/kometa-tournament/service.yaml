@@ -1,0 +1,19 @@
+{{- if .Values.tournament }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-tournament
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}-tournament
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Chart.Name }}-tournament
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: {{ .Values.tournament.service.port }}
+{{- end }}
