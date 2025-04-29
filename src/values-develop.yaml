@@ -152,7 +152,7 @@ tournament:
   replicaCount: 1
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-tournament
-    tag: v1.0-develop-17
+    tag: v1.0-develop-18
   resources:
     limits:
       memory: "200Mi"
