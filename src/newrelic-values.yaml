@@ -1,246 +1,13 @@
-# Default values for kometa.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 1
-
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-podAnnotations: {}
-podLabels: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
-service:
-  type: ClusterIP
-  port: 80
-
-ingress:
-  enabled: true
-  className: alb
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:202533518394:certificate/f89b813d-7834-49e0-a23f-186d30037927,arn:aws:acm:us-east-1:202533518394:certificate/8fede441-dc3e-4211-9f79-785d9a26ddc1,arn:aws:acm:us-east-1:202533518394:certificate/34e171ec-b287-4a4a-b0ea-d02c16cfff2b,arn:aws:acm:us-east-1:202533518394:certificate/ff27f041-c3ee-4787-889d-5c80eeb91c16,arn:aws:acm:us-east-1:202533518394:certificate/233b3a93-555f-4233-a719-be39fed9bb18
-  tls:
-    - hosts:
-        - auth.kometadeveloper.xyz
-        - core.kometadeveloper.xyz
-        - cards.kometadeveloper.xyz
-      secretName: kometa-tls
-  services:
-    - host: auth.kometadeveloper.xyz
-      paths:
-        - path: /
-          pathType: Prefix
-          name: kometa-auth
-          port: 80
-    - host: core.kometadeveloper.xyz
-      paths:
-        - path: /
-          pathType: Prefix
-          name: kometa-core
-          port: 80
-    - host: cards.kometadeveloper.xyz
-      paths:
-        - path: /
-          pathType: Prefix
-          name: cards-service
-          port: 80
-    - host: marketplace.kometadeveloper.xyz
-      paths:
-        - path: /
-          pathType: Prefix
-          name: kometa-marketplace
-          port: 80
-    - host: tournament.kometadeveloper.xyz
-      paths:
-        - path: /
-          pathType: Prefix
-          name: kometa-tournament
-          port: 80
-
-auth:
-  replicaCount: 1
-  image:
-    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-auth
-    tag: v1.0-develop-64
-  resources:
-    limits:
-      memory: "200Mi"
-      cpu: "200m"
-    requests:
-      memory: "150Mi"
-      cpu: "150m"
-  service:
-    port: 4041
-  ingress:
-    host: auth.kometadeveloper.xyz
-    paths:
-      - path: /
-        pathType: Prefix
-
-core:
-  replicaCount: 1
-  image:
-    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-core
-    tag: v1.0-develop-68
-  resources:
-    limits:
-      memory: "200Mi"
-      cpu: "200m"
-    requests:
-      memory: "150Mi"
-      cpu: "150m"
-  service:
-    port: 4041
-  ingress:
-    host: core.kometadeveloper.xyz
-    paths:
-      - path: /
-        pathType: Prefix
-
-marketplace:
-  replicaCount: 1
-  image:
-    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-marketplace
-    tag: v1.0-develop-11
-  resources:
-    limits:
-      memory: "200Mi"
-      cpu: "200m"
-    requests:
-      memory: "150Mi"
-      cpu: "150m"
-  service:
-    port: 3000
-  ingress:
-    host: marketplace.kometadeveloper.xyz
-    paths:
-      - path: /
-        pathType: Prefix
-
-tournament:
-  replicaCount: 1
-  image:
-    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-tournament
-    tag: v1.0-develop-21
-  resources:
-    limits:
-      memory: "200Mi"
-      cpu: "200m"
-    requests:
-      memory: "150Mi"
-      cpu: "150m"
-  service:
-    port: 3000
-  ingress:
-    host: tournament.kometadeveloper.xyz
-    paths:
-      - path: /
-        pathType: Prefix
-
-cardsService:
-  replicaCount: 1
-  name: cards-service
-  image:
-    repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/tarjetas-service
-    tag: v1.0-dev-88
-  resources:
-    limits:
-      memory: "200Mi"
-      cpu: "200m"
-    requests:
-      memory: "150Mi"
-      cpu: "150m"
-  service:
-    port: 3000
-  ingress:
-    host: cards.kometadeveloper.xyz
-    paths:
-      - path: /
-        pathType: Prefix
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
-
-autoscaling:
-  enabled: true
-  minReplicas: 1
-  maxReplicas: 2
-  targetCPUUtilizationPercentage: 75
-  targetMemoryUtilizationPercentage: 75
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
-# NEW RELIC
-
 newrelic-infrastructure:
   # newrelic-infrastructure.enabled -- Install the [`newrelic-infrastructure` chart](https://github.com/newrelic/nri-kubernetes/tree/main/charts/newrelic-infrastructure)
   enabled: true
+  nodeSelector:
+    app: newrelic
+  tolerations:
+    - key: newrelic
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
 
 nri-prometheus:
   # nri-prometheus.enabled -- Install the [`nri-prometheus` chart](https://github.com/newrelic/nri-prometheus/tree/main/charts/nri-prometheus)
@@ -249,6 +16,13 @@ nri-prometheus:
 nri-metadata-injection:
   # nri-metadata-injection.enabled -- Install the [`nri-metadata-injection` chart](https://github.com/newrelic/k8s-metadata-injection/tree/main/charts/nri-metadata-injection)
   enabled: true
+  nodeSelector:
+    app: newrelic
+  tolerations:
+    - key: newrelic
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
 
 kube-state-metrics:
   # kube-state-metrics.enabled -- Install the [`kube-state-metrics` chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics) from the stable helm charts repository.
@@ -256,14 +30,39 @@ kube-state-metrics:
   # metrics by default. You can enable the target labels/annotations metrics to be monitored by using the metricLabelsAllowlist/metricAnnotationsAllowList options described [here](https://github.com/prometheus-community/helm-charts/blob/159cd8e4fb89b8b107dcc100287504bb91bf30e0/charts/kube-state-metrics/values.yaml#L274) in
   # your Kubernetes clusters.
   enabled: true
+  nodeSelector:
+    app: newrelic
+  tolerations:
+    - key: newrelic
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
 
 nri-kube-events:
   # nri-kube-events.enabled -- Install the [`nri-kube-events` chart](https://github.com/newrelic/nri-kube-events/tree/main/charts/nri-kube-events)
   enabled: true
+  nodeSelector:
+    app: newrelic
+  tolerations:
+    - key: newrelic
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
 
 newrelic-logging:
   # newrelic-logging.enabled -- Install the [`newrelic-logging` chart](https://github.com/newrelic/helm-charts/tree/master/charts/newrelic-logging)
   enabled: true
+  nodeSelector: {}
+  tolerations: []
+  config:
+    parsers:
+      - name: json
+        format: json
+
+    inputs:
+      - name: tail
+        path: /var/log/containers/*.log
+        parser: json
   # fluentBit:
     # -- What path will be mounted to read logs from the node
     # linuxMountPath: /var
@@ -290,6 +89,13 @@ newrelic-infra-operator:
 newrelic-prometheus-agent:
   # newrelic-prometheus-agent.enabled -- Install the [`newrelic-prometheus-agent` chart](https://github.com/newrelic/newrelic-prometheus-configurator/tree/main/charts/newrelic-prometheus-agent)
   enabled: true
+  nodeSelector:
+    app: newrelic
+  tolerations:
+    - key: newrelic
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
 
 newrelic-eapm-agent:
   # newrelic-eapm-agent.enabled -- Install the [`nr-eapm-agent`](https://github.com/newrelic/helm-charts/tree/master/charts/nr-ebpf-agent)
@@ -298,6 +104,13 @@ newrelic-eapm-agent:
 k8s-agents-operator:
   # k8s-agents-operator.enabled -- Install the [`k8s-agents-operator` chart](https://github.com/newrelic/k8s-agents-operator/tree/main/charts/k8s-agents-operator)
   enabled: true
+  nodeSelector:
+    app: newrelic
+  tolerations:
+    - key: newrelic
+      operator: Equal
+      value: "true"
+      effect: NoSchedule
 
 newrelic-k8s-metrics-adapter:
   # newrelic-k8s-metrics-adapter.enabled -- Install the [`newrelic-k8s-metrics-adapter.` chart](https://github.com/newrelic/newrelic-k8s-metrics-adapter/tree/main/charts/newrelic-k8s-metrics-adapter) (Beta)
@@ -355,9 +168,15 @@ global:
   # -- Sets pod/node affinities
   affinity: {}
   # -- Sets pod's node selector
-  nodeSelector: {}
+  nodeSelector: 
+    app: newrelic
+
   # -- Sets pod's tolerations to node taints
-  tolerations: []
+  tolerations: 
+    - key: newrelic
+      operator: "Equal"
+      value: "true"
+      effect: NoSchedule
 
   # -- Adds extra attributes to the cluster and all the metrics emitted to the backend
   customAttributes: {}
@@ -421,4 +240,3 @@ global:
   #             PORT: 6379
   #           labels:
   #             env: test
-

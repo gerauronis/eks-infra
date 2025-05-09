@@ -11,3 +11,17 @@ nodeGroups:
     desiredCapacity: 1
     minSize: 1
     maxSize: 2
+
+  - name: ng-newrelic
+    instanceType: t4g.small
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 2
+    labels:
+      app: newrelic
+    taints:
+      - key: newrelic
+        value: "true"
+        effect: NoSchedule
+    
+

@@ -74,6 +74,10 @@ kubectl config use-context gerardo.argueta@auronis.net@kometa-dev.us-east-1.eksc
 
 ```bash
 helm upgrade kometa-develop ./src --namespace kometa-develop -f src/values-develop.yaml
+helm upgrade newrelic-bundle newrelic/nri-bundle \
+  --namespace newrelic \
+  -f src/newrelic-values.yaml
+
 ```
 
 Desinstalar
