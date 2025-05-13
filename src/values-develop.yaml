@@ -112,7 +112,7 @@ core:
   replicaCount: 1
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-core
-    tag: v1.0-develop-70
+    tag: v1.0-develop-71
   resources:
     limits:
       memory: "200Mi"
