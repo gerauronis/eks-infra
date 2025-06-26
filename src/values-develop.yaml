@@ -132,7 +132,7 @@ marketplace:
   replicaCount: 1
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-marketplace
-    tag: v1.0-develop-56
+    tag: v1.0-develop-57
   resources:
     limits:
       memory: "200Mi"
