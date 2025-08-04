@@ -92,7 +92,7 @@ auth:
   replicaCount: 1
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-auth
-    tag: v1.0-develop
+    tag: v1.0-develop-77
   resources:
     limits:
       memory: "200Mi"
@@ -112,7 +112,7 @@ core:
   replicaCount: 1
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-core
-    tag: v1.0-develop
+    tag: v1.0-develop-87
   resources:
     limits:
       memory: "200Mi"
@@ -132,7 +132,7 @@ marketplace:
   replicaCount: 1
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-marketplace
-    tag: v1.0-develop
+    tag: v1.0-develop-73
   resources:
     limits:
       memory: "200Mi"
@@ -152,7 +152,7 @@ tournament:
   replicaCount: 1
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-tournament
-    tag: v1.0-develop
+    tag: v1.0-develop-27
   resources:
     limits:
       memory: "200Mi"
