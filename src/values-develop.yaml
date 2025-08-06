@@ -92,7 +92,7 @@ auth:
   replicaCount: 1
   image:
     repository: 202533518394.dkr.ecr.us-east-1.amazonaws.com/kometa-auth
-    tag: v1.0-develop-81
+    tag: v1.0-develop-82
   resources:
     limits:
       memory: "200Mi"
